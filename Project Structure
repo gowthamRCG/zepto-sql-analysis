@@ -1,0 +1,15 @@
+zepto-sql-analysis/
+│
+├── data/
+│   └── zepto_data.csv
+│
+├── sql/
+│   ├── 01_table_creation.sql
+│   ├── 02_data_validation.sql
+│   ├── 03_data_cleaning.sql
+│   ├── 04_business_insights.sql
+│
+├── screenshots/
+│   └── result_samples.png
+│
+└── README.md
