@@ -1,0 +1,110 @@
+01_table_creation.sql
+
+CREATE DATABASE Zepto_SQL_Projects;
+
+
+USE Zepto_SQL_Projects;
+
+CREATE TABLE zepto_v2 (
+    sku_id INT PRIMARY KEY,
+    category VARCHAR(255),
+    name VARCHAR(255) NOT NULL,
+    mrp INT,
+    discount_percent DECIMAL(5,2),
+    available_quantity INT,
+    discounted_selling_price DECIMAL(10,2),
+    weight_in_grams INT,
+    out_of_stock BIT,
+    quantity INT
+);
+
+
+02_data_validation.sql
+
+-- Total rows
+
+SELECT COUNT(*) FROM zepto_v2;
+
+-- Check null values
+
+SELECT *
+FROM zepto_v2
+WHERE category IS NULL
+   OR name IS NULL
+   OR mrp IS NULL
+   OR discount_percent IS NULL
+   OR discounted_selling_price IS NULL
+   OR weight_in_grams IS NULL
+   OR out_of_stock IS NULL
+   OR quantity IS NULL;
+
+-- Unique categories
+
+SELECT DISTINCT category
+FROM zepto_v2
+ORDER BY category;
+
+
+
+03_data_cleaning.sql
+
+-- Remove invalid price records
+
+DELETE FROM zepto_v2
+WHERE mrp = 0;
+
+
+
+-- Convert paise to rupees
+
+UPDATE zepto_v2
+SET mrp = mrp / 100.0,
+    discounted_selling_price = discounted_selling_price / 100.0;
+
+
+
+04_business_insights.sql
+
+-- Top 10 highest discount products
+
+SELECT DISTINCT TOP 10
+    name,
+    mrp,
+    discount_percent
+FROM zepto_v2
+ORDER BY discount_percent DESC;
+
+
+-- High priced out-of-stock products
+
+SELECT DISTINCT
+    name,
+    mrp
+FROM zepto_v2
+WHERE out_of_stock = 1 AND mrp > 300
+ORDER BY mrp DESC;
+
+
+-- Category-wise revenue
+
+SELECT
+    category,
+    SUM(discounted_selling_price * available_quantity) AS total_revenue
+FROM zepto_v2
+GROUP BY category
+ORDER BY total_revenue DESC;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
